@@ -34,20 +34,32 @@ function initMap() {
         marker = new google.maps.Marker({
             position: position,
             map: map,
+            animation: google.maps.Animation.DROP,
             title: markers[i][0]
         });
+
 
         // Allow each marker to have an info window
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
+				toggleBounce(marker);
                 infoWindow.setContent(infoWindowContent[i][0]);
                 infoWindow.open(map, marker);
+
             }
         })(marker, i));
          }
+
      }
+// http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
 
-
+  function toggleBounce(marker) {
+  if (marker.getAnimation() !== null) {
+    marker.setAnimation(null);
+  } else {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+}
 
 
 //         google.maps.event.addDomListener(window, 'load', loadMap);

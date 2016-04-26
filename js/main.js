@@ -10,7 +10,11 @@ function initMap() {
 
             var markers = [
             	['Hanedaya Ramen', 35.641980, 138.543689],
-            	['Shoshi Kantentsu Ramen', 35.652693, 138.561918 ]
+            	['Shoshi Kantentsu Ramen', 35.652693, 138.561918],
+                ['Nakai Ramen', 35.642302, 138.557425],
+                ['Enja Ramen', 35.648980, 138.589937],
+                ['Zenjiro Ramen', 35.645172, 138.554717],
+                ['Daikokuya Ramen', 35.647434, 138.548888]
             ]
 
             // Info Window Content
@@ -21,7 +25,24 @@ function initMap() {
         ['<div class="info_content">' +
         '<h3>Shoshi Kantentsu Ramen</h3>' +
         '<p>Miso ramen.</p>' +
+        '</div>'],
+        ['<div class="info_content">' +
+        '<h3>Nakai Ramen</h3>' +
+        '<p>Shrimp ramen.</p>' +
+        '</div>'],
+        ['<div class="info_content">' +
+        '<h3>Enja Ramen</h3>' +
+        '<p>Fish ramen.</p>' +
+        '</div>'],
+        ['<div class="info_content">' +
+        '<h3>Zenjiro Ramen</h3>' +
+        '<p>Various ramen.</p>' +
+        '</div>'],
+        ['<div class="info_content">' +
+        '<h3>Daikokuya Ramen</h3>' +
+        '<p>Shoyutonkotsu ramen.</p>' +
         '</div>']
+
     ];
 
     // Display multiple markers on a map
@@ -65,3 +86,50 @@ function initMap() {
 //         google.maps.event.addDomListener(window, 'load', loadMap);
 
 // AIzaSyCr492h5nUEKHElF9GxEq_fie2z3c478nY
+
+//var LocationList = '<li class="pure-menu-item" data-bind="text: title"></li>';
+
+function viewModel() {
+    var self = this;
+
+    self.restaurants = ko.observableArray([
+  {
+    name: ("Hanedaya"),
+    lat: (35.641980),
+    lng: (138.543689)
+  },
+  {
+    name: ("Shoshi Kantentsu"),
+    lat: (35.652693),
+    lng: (138.561918)
+  },
+  {
+    name: ("Nakai"),
+    lat: (35.642302),
+    lng: (138.557425)
+  },
+  {
+    name: ("Enja"),
+    lat: (35.648980),
+    lng: (138.589937)
+  },
+  {
+    name: ("Zenjiro"),
+    lat: (35.645172),
+    lng: (138.554717)
+  },
+  {
+    name: ("Daikokuya"),
+    lat: (35.647434),
+    lng: (138.548888)
+  },
+]);
+
+myFunction = function() {
+    alert("hello world");
+}
+
+}
+
+ko.applyBindings(new viewModel());
+

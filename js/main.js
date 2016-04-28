@@ -1,3 +1,38 @@
+var restaurants = [
+  {
+    name: "Hanedaya",
+    lat: 35.641980,
+    lng: 138.543689
+  },
+  {
+    name: "Shoshi Kantentsu",
+    lat: 35.652693,
+    lng: 138.561918
+  },
+  {
+    name: "Nakai",
+    lat: 35.642302,
+    lng: 138.557425
+  },
+  {
+    name: "Enja",
+    lat: 35.648980,
+    lng: 138.589937
+  },
+  {
+    name: "Zenjiro",
+    lat: 35.645172,
+    lng: 138.554717
+  },
+  {
+    name: "Daikokuya",
+    lat: 35.647434,
+    lng: 138.548888
+  },
+]
+
+
+
 function initMap() {
 
             var mapOptions = {

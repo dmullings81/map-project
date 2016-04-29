@@ -1,5 +1,6 @@
 // Model
 
+//Info about each restaurant
 var restaurants = [
   {
     name: "Hanedaya",
@@ -33,43 +34,43 @@ var restaurants = [
   },
 ]
 
+// Restaurant object
 var Restaurant = function(data) {
     this.name = ko.observable(data.name);
     this.lat = ko.observable(data.lat);
     this.lng = ko.observable(data.lng);
 }
 
-// ViewModel
+  //Global variables
+    var map;
+    var infoWindow;
+    var marker;
 
-function viewModel() {
+// **** ViewModel ****
+
+//held inside initMap as this is what the API is calling back to. Change later?
+function initMap() {
+
+var viewModel = function () {
+
     var self = this;
 
-    this.restaurantList = ko.observableArray([]);
-//Code adapted from Ben Jaffe's CatClickers tutorial
+    //Store list of restaurants in observableArray to easily bind using ko.
+      this.restaurantList = ko.observableArray([]);
+//Using Udacity's JavaScript Design Patterns CatClickers tutorial
     restaurants.forEach(function(restaurantItem){
         self.restaurantList.push( new  Restaurant(restaurantItem) );
     });
 
-
-
-myFunction = function() {
-    alert("hello world");
-}
-
-}
-
-ko.applyBindings(new viewModel());
-
-
-
-
-
+    myFunction = function() {
+        alert("hello world");
+    }
 
 
 //Google Maps API
 
-function initMap() {
 
+            //hardcoded map location stored as variable in case of adding further locs in future.
             var kofu = new google.maps.LatLng(35.653296, 138.557487);
 
             var mapOptions = {
@@ -83,8 +84,8 @@ function initMap() {
 
 
 
-                // Display multiple markers on a map
-    var infoWindow = new google.maps.InfoWindow(), marker, i;
+    // Display multiple markers on a map
+    var infoWindow = new google.maps.InfoWindow(), marker;
 
     // Loop through our array of markers & place each one on the map
     //should loop through observable array?
@@ -105,23 +106,39 @@ function initMap() {
                 infoWindow.open(map, marker);
                 map.panTo(marker.position)
             }
-        })(marker, i));
+        })(marker));
 });
-     }
-// http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
 
   function toggleBounce(marker) {
   if (marker.getAnimation() !== null) {
     marker.setAnimation(null);
   } else {
     marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){ marker.setAnimation(null); }, 2800);
   }
 }
 
 
-//         google.maps.event.addDomListener(window, 'load', loadMap);
 
-// AIzaSyCr492h5nUEKHElF9GxEq_fie2z3c478nY
+}
 
-//var LocationList = '<li class="pure-menu-item" data-bind="text: title"></li>';
+ko.applyBindings(new viewModel());
+}
+
+
+
+// End ViewModel
+
+
+
+
+
+
+// http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
+
+
+
+//Google API key AIzaSyCr492h5nUEKHElF9GxEq_fie2z3c478nY
+//End Google Maps API
+
 

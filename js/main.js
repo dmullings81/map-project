@@ -6,37 +6,37 @@ var restaurants = [
     name: "Hanedaya",
     lat: 35.641980,
     lng: 138.543689,
-    type: ["shoyu-tonkotsu"]
+    soupType: "shoyu-tonkotsu"
   },
   {
     name: "Shoshi Kantentsu",
     lat: 35.652693,
     lng: 138.561918,
-    type: ["miso"]
+    soupType: "miso"
   },
   {
     name: "Nakai",
     lat: 35.642302,
     lng: 138.557425,
-    type: ["ebi"]
+    soupType: "ebi"
   },
   {
     name: "Enja",
     lat: 35.648980,
     lng: 138.589937,
-    type: ["fish"]
+    soupType: "fish"
   },
   {
     name: "Zenjiro",
     lat: 35.645172,
     lng: 138.554717,
-    type: ["shoyu", "tantanmen", "miso"]
+    soupType: "shoyu"
   },
   {
     name: "Daikokuya",
     lat: 35.647434,
     lng: 138.548888,
-    type: ["shoyu-tonkotsu"]
+    soupType: "shoyu-tonkotsu"
   },
 ]
 
@@ -45,7 +45,7 @@ var Restaurant = function(data) {
     this.name = ko.observable(data.name);
     this.lat = ko.observable(data.lat);
     this.lng = ko.observable(data.lng);
-    this.type = ko.observableArray(data.type);
+    this.soupType = ko.observableArray(data.soupType);
 }
 
   //Global variables
@@ -197,8 +197,8 @@ self.restaurantList().forEach(function(restaurant) {
     // input can be found within the restaurant name.
     self.restaurantList().forEach(function(restaurant) {
       restaurant.marker.setVisible(false);
-
-      if (restaurant.name.toLowerCase().indexOf(searchInput) !== -1) {
+//to do - add
+      if (restaurant.soupType.toLowerCase().indexOf(searchInput) !== -1) {
         self.visibleRestaurants.push(restaurant);
       }
     });

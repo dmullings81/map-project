@@ -24,7 +24,7 @@ var restaurants = [
     name: "Enja",
     lat: 35.648980,
     lng: 138.589937,
-    soupType: "fish"
+    soupType: "fish" //tonkotsu gyofun gyokai sakana
   },
   {
     name: "Zenjiro",
@@ -95,29 +95,8 @@ var viewModel = function () {
 
 // http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
     // Display multiple markers on a map
-    var infoWindow = new google.maps.InfoWindow(), marker;
-/*
-    // Loop through our array of markers & place each one on the map
-    //should loop through observable array?
-    self.restaurantList().forEach(function(restaurant){
-        var position = new google.maps.LatLng(restaurant.lat, restaurant.lng);
-        //bounds.extend(position);
-        restaurant.marker = new google.maps.Marker({
-            position: position,
-            map: map,
-            animation: google.maps.Animation.DROP,
-            title: restaurant.name,
-    });
+    var infoWindow = new google.maps.InfoWindow();
 
-        google.maps.event.addListener(restaurant.marker, 'click', (function(marker) {
-            return function() {
-                toggleBounce(restaurant.marker);
-                infoWindow.setContent(restaurant.marker.title);
-                infoWindow.open(map, restaurant.marker);
-                map.panTo(restaurant.marker.position)
-            }
-        })(restaurant.marker));
-}); */
 //*********************************
 
 // Build Markers via the Maps API and place them on the map.
@@ -129,38 +108,143 @@ var viewModel = function () {
       animation: google.maps.Animation.DROP,
       title: restaurant.name
     };
-
+    //add marker for each restaurant
     restaurant.marker = new google.maps.Marker(markerOptions);
-
+    // add listener to each marker
     google.maps.event.addListener(restaurant.marker, 'click', (function(marker) {
             return function() {
                 toggleBounce(restaurant.marker);
-                infoWindow.setContent(restaurant.marker.title);
-                infoWindow.open(map, restaurant.marker);
-                map.panTo(restaurant.marker.position)
+                //infoWindow.setContent(restaurant.marker.title);
+                //infoWindow.open(map, restaurant.marker);
+                map.panTo(restaurant.marker.position);
+                //self.showInfoWindow(marker);
             }
         })(restaurant.marker));
-  });
+
+
+// ************* infoWindow contents **************
+
+//Create variables for use in contentString for infowindows
+    var windowNames = restaurant.name;
+
+
+    //Create new infowindow
+    infoWindow = new google.maps.InfoWindow();
+
+    //Create event listener to open infowindow when marker is clicked
+    google.maps.event.addListener(restaurant.marker, 'click', function() {
+          //Create contentString variable for infowindows
+          var contentString;
+          var latitude = restaurant.lat;
+          var longitude = restaurant.lng;
+          //Instagram API request URL
+          var instagramURL = "https://api.instagram.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.1fb234f.9116b984edae498289e20991c57994c6"
+
+
+          $.ajax({
+      type: "GET",
+      dataType: "jsonp",
+      cache: false,
+      url: instagramURL,
+      success: function(data) {
+        // placing the images on the page
+        for (var i = 0; i < 6; i++) {
+          iWContent = '<div class="instagram"><p> ' + restaurant.name + '</p><br> <img info-window" src="' + data.data[0].images.low_resolution.url + '"><div class="info-window"><a href="' +
+          data.data[0].link + '">#' + data.data[0].tags[0] + '</a>' +  ' ' + data.data[0].caption.text + '</div></div>';
+          infoWindow.setContent(iWContent);
+          //self.infoWindow().open(myPlaces.map, currentMarker);
+
+
+                  console.log(data);
+    }
+        }
+      }
+    );
+
+
+          //AJAX request for Wikipedia API information used in infowindows
+          /*$.ajax ({
+            url: instagramURL,
+            dataType: "jsonp",
+            type: "GET",
+            data: {client_id: "dab20c62410d4e2abd752f80e27857f7"},
+            success: function ( response ){
+            var dataList = response[1];
+              //If an article is found, populate infowindow with content string information showing Wikipedia response
+              if (response.length > 0) {
+                for (var i=0; i<5; i++) {
+                  dataStr = dataList[i];
+                 iWContent = '<div class="instagram"><img info-window" src="' + data.data[0].images.low_resolution.url + '"><div class="info-window"><a href="' +
+          data.data[0].link + '">#' + data.data[0].tags[0] + '</a>' +  ' ' + data.data[0].caption.text + '</div></div>';
+          infoWindow().setContent(iWContent);
+          //self.infoWindow().open(myPlaces.map, currentMarker);
+
+
+                  console.log(data);
+                }
+                console.log(instagramURL);
+              //If no article is found, populate infowindow with content string reflecting no articles were found
+              } else {
+                iWContent = '<div id="content">' + windowNames + '<p>' + 'No pictures found on Instagram'+ '</p>' + '</div>'
+                console.log(instagramURL);
+                infoWindow.setContent(iWContent);
+              }
+            }
+          //Communicate error when Wikipedia API is unable to be reached or is not available
+          }).error(function(e){
+            failContent = '<div id="content">' + windowNames + '<p>' + 'Failed to reach Instagram'+ '</p>' + '</div>'
+            infoWindow.setContent(failContent);
+          }); */
+      //Call to open the infowindow
+      console.log("clicked");
+      infoWindow.open(map, this);
+    });
 
 // ***********************************************
 
+
+
+  });
 //make the marker bounce for a set duration
   function toggleBounce(marker) {
   if (marker.getAnimation() !== null) {
     marker.setAnimation(null);
   } else {
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function(){ marker.setAnimation(null); }, 2900);
+    setTimeout(function(){ marker.setAnimation(null); }, 2100);
   }
 }
 
-    //infoWindow bound to the list items
-    self.showWindows = function(restaurant) { //this recognizes GeoCoding and AJAX
-        //console.log(placeItem);
-        google.maps.event.trigger(restaurant.marker, 'click')
-    }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ******** Filter funcionality **********
 
 //array contains all markers currently visible, as they can be filtered out
 //technique from http://codepen.io/prather-mcs/pen/KpjbNN?editors=001
@@ -171,17 +255,10 @@ self.restaurantList().forEach(function(restaurant) {
   self.visibleRestaurants.push(restaurant);
 });
 
-
-
-
   // This, along with the data-bind on the <input> element, lets KO keep
   // constant awareness of what the user has entered. It stores the user's
   // input at all times.
   self.userInput = ko.observable('');
-
-
-
-
 
 
   // The filter will look at the names of the places the Markers are standing
@@ -228,6 +305,11 @@ ko.applyBindings(new viewModel());
 
 
 //Google API key AIzaSyCr492h5nUEKHElF9GxEq_fie2z3c478nY
-//End Google Maps API
+
+//Instagram API CLIENT ID dab20c62410d4e2abd752f80e27857f7
+//CLIENT SECRET 220c6ea74e484c68a645067992a3c717
+
+//Flickr Key 59a6bd8485cf47d8f550aff19d19386e
+// Secret 2459fbbf2fe176e0
 
 

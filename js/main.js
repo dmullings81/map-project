@@ -71,12 +71,6 @@ var viewModel = function () {
         self.restaurantList.push( new  Restaurant(restaurantItem) );
     });*/
 
-
-    myFunction = function() {
-        alert("hello world");
-    }
-
-
 //Google Maps API
 
 
@@ -90,6 +84,12 @@ var viewModel = function () {
             };
 
             var map = new google.maps.Map(document.getElementById("map"),mapOptions);
+/*  TODO:  Google maps error message
+            setTimeout(function() {
+  if(!google || !google.maps) {
+    alert("Oops... Failed to reach Google Maps")
+  }
+}, 5000);*/
 
 
 
@@ -116,7 +116,7 @@ var viewModel = function () {
                 toggleBounce(restaurant.marker);
                 //infoWindow.setContent(restaurant.marker.title);
                 //infoWindow.open(map, restaurant.marker);
-                map.panTo(restaurant.marker.position);
+                //map.panTo(restaurant.marker.position);
                 //self.showInfoWindow(marker);
             }
         })(restaurant.marker));
@@ -138,73 +138,50 @@ var viewModel = function () {
           var latitude = restaurant.lat;
           var longitude = restaurant.lng;
           //Instagram API request URL
-          var instagramURL = "https://api.instagram.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.1fb234f.9116b984edae498289e20991c57994c6"
-
+          var instagramURL = "https://api.instagrammmmmmm.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.1fb234f.9116b984edae498289e20991c57994c6"
+          var instagramRequestTimeout = setTimeout(function(){
+        failContent = '<div id="content">' + windowNames + '<p>' + 'Oops... Failed to reach Instagram'+ '</p>' + '</div>'
+            infoWindow.setContent(failContent);
+    }, 8000);
 
           $.ajax({
       type: "GET",
       dataType: "jsonp",
       cache: false,
       url: instagramURL,
-      success: function(data) {
+      }).done(function(data) {
+        if (data.data.length > 0) {
         // placing the images on the page
         for (var i = 0; i < 6; i++) {
-          iWContent = '<div class="instagram"><p> ' + restaurant.name + '</p><br> <img info-window" src="' + data.data[0].images.low_resolution.url + '"><div class="info-window"><a href="' +
-          data.data[0].link + '">#' + data.data[0].tags[0] + '</a>' +  ' ' + data.data[0].caption.text + '</div></div>';
+          iWContent = '<div class="instagram" style="width:340px;"><p style="float:left;"> ' + restaurant.name + '</p> <div class="insta-images"><a href="' +
+          data.data[0].link + '"  target="_blank"><img src="' + data.data[0].images.low_resolution.url + '" style="width:160px;height:160px;clear:both;float:left;"></a><a href="' +
+          data.data[1].link + '"  target="_blank"><img src="' + data.data[1].images.low_resolution.url + '" style="width:160px;height:160px;float:right;"></a></div></div>';
           infoWindow.setContent(iWContent);
           //self.infoWindow().open(myPlaces.map, currentMarker);
 
-
+          clearTimeout(wikiRequestTimeout);
                   console.log(data);
     }
-        }
-      }
-    );
-
-
-          //AJAX request for Wikipedia API information used in infowindows
-          /*$.ajax ({
-            url: instagramURL,
-            dataType: "jsonp",
-            type: "GET",
-            data: {client_id: "dab20c62410d4e2abd752f80e27857f7"},
-            success: function ( response ){
-            var dataList = response[1];
-              //If an article is found, populate infowindow with content string information showing Wikipedia response
-              if (response.length > 0) {
-                for (var i=0; i<5; i++) {
-                  dataStr = dataList[i];
-                 iWContent = '<div class="instagram"><img info-window" src="' + data.data[0].images.low_resolution.url + '"><div class="info-window"><a href="' +
-          data.data[0].link + '">#' + data.data[0].tags[0] + '</a>' +  ' ' + data.data[0].caption.text + '</div></div>';
-          infoWindow().setContent(iWContent);
-          //self.infoWindow().open(myPlaces.map, currentMarker);
-
-
-                  console.log(data);
-                }
-                console.log(instagramURL);
-              //If no article is found, populate infowindow with content string reflecting no articles were found
-              } else {
+  } else {
                 iWContent = '<div id="content">' + windowNames + '<p>' + 'No pictures found on Instagram'+ '</p>' + '</div>'
                 console.log(instagramURL);
                 infoWindow.setContent(iWContent);
               }
-            }
-          //Communicate error when Wikipedia API is unable to be reached or is not available
-          }).error(function(e){
-            failContent = '<div id="content">' + windowNames + '<p>' + 'Failed to reach Instagram'+ '</p>' + '</div>'
-            infoWindow.setContent(failContent);
-          }); */
-      //Call to open the infowindow
-      console.log("clicked");
+        });
+
+      ; //End Ajax request
+      console.log("Restaurant Clicked On");
+
       infoWindow.open(map, this);
-    });
+
+    }); //end click listener
 
 // ***********************************************
 
 
 
-  });
+  }); // end building markers
+
 //make the marker bounce for a set duration
   function toggleBounce(marker) {
   if (marker.getAnimation() !== null) {

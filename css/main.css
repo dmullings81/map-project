@@ -11,3 +11,22 @@ html, body {
     overflow: hidden;*/
 }
 
+.instagram-div {
+	float: left;
+}
+
+.insta-images {
+	clear: both;
+}
+
+.insta-images img {
+
+	height:120px;
+	float: left;
+	padding-right: 5px;
+}
+
+.gm-style-iw {
+
+}
+/*http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html*/

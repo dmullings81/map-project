@@ -95,7 +95,7 @@ var viewModel = function () {
 
 // http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
     // Display multiple markers on a map
-    var infoWindow = new google.maps.InfoWindow();
+    //var infoWindow = new google.maps.InfoWindow();
 
 //*********************************
 
@@ -129,7 +129,11 @@ var viewModel = function () {
 
 
     //Create new infowindow
-    infoWindow = new google.maps.InfoWindow();
+    infoWindow = new google.maps.InfoWindow(
+      {
+
+    //maxWidth: 700
+  });
 
     //Create event listener to open infowindow when marker is clicked
     google.maps.event.addListener(restaurant.marker, 'click', function() {
@@ -138,7 +142,7 @@ var viewModel = function () {
           var latitude = restaurant.lat;
           var longitude = restaurant.lng;
           //Instagram API request URL
-          var instagramURL = "https://api.instagrammmmmmm.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.1fb234f.9116b984edae498289e20991c57994c6"
+          var instagramURL = "https://api.instagram.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.1fb234f.9116b984edae498289e20991c57994c6"
           var instagramRequestTimeout = setTimeout(function(){
         failContent = '<div id="content">' + windowNames + '<p>' + 'Oops... Failed to reach Instagram'+ '</p>' + '</div>'
             infoWindow.setContent(failContent);
@@ -153,13 +157,15 @@ var viewModel = function () {
         if (data.data.length > 0) {
         // placing the images on the page
         for (var i = 0; i < 6; i++) {
-          iWContent = '<div class="instagram" style="width:340px;"><p style="float:left;"> ' + restaurant.name + '</p> <div class="insta-images"><a href="' +
-          data.data[0].link + '"  target="_blank"><img src="' + data.data[0].images.low_resolution.url + '" style="width:160px;height:160px;clear:both;float:left;"></a><a href="' +
-          data.data[1].link + '"  target="_blank"><img src="' + data.data[1].images.low_resolution.url + '" style="width:160px;height:160px;float:right;"></a></div></div>';
+          iWContent = '<div class="instagram-div"><p> ' + restaurant.name + '</p> <div class="insta-images"><a href="' +
+          data.data[0].link + '"  target="_blank"><img src="' + data.data[0].images.low_resolution.url + '"></a><a href="' +
+          data.data[1].link + '"  target="_blank"><img src="' + data.data[1].images.low_resolution.url + '"></a><a href="' +
+          data.data[2].link + '"  target="_blank"><img src="' + data.data[2].images.low_resolution.url + '"></a><a href="' +
+          data.data[3].link + '"  target="_blank"><img src="' + data.data[3].images.low_resolution.url + '"></a></div></div>';
           infoWindow.setContent(iWContent);
           //self.infoWindow().open(myPlaces.map, currentMarker);
 
-          clearTimeout(wikiRequestTimeout);
+          clearTimeout(instagramRequestTimeout);
                   console.log(data);
     }
   } else {

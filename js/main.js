@@ -110,23 +110,11 @@ var viewModel = function () {
     };
     //add marker for each restaurant
     restaurant.marker = new google.maps.Marker(markerOptions);
-    // add listener to each marker
-    google.maps.event.addListener(restaurant.marker, 'click', (function(marker) {
-            return function() {
-                toggleBounce(restaurant.marker);
-                //infoWindow.setContent(restaurant.marker.title);
-                //infoWindow.open(map, restaurant.marker);
-                //map.panTo(restaurant.marker.position);
-                //self.showInfoWindow(marker);
-            }
-        })(restaurant.marker));
-
 
 // ************* infoWindow contents **************
 
 //Create variables for use in contentString for infowindows
     var windowNames = restaurant.name;
-
 
     //Create new infowindow
     infoWindow = new google.maps.InfoWindow(
@@ -137,6 +125,7 @@ var viewModel = function () {
 
     //Create event listener to open infowindow when marker is clicked
     google.maps.event.addListener(restaurant.marker, 'click', function() {
+
           //Create contentString variable for infowindows
           var contentString;
           var latitude = restaurant.lat;
@@ -157,11 +146,10 @@ var viewModel = function () {
         if (data.data.length > 0) {
         // placing the images on the page
         for (var i = 0; i < 6; i++) {
-          iWContent = '<div class="instagram-div"><p> ' + restaurant.name + '</p> <div class="insta-images"><a href="' +
+          iWContent = '<div class="instagram-div"><h2> ' + restaurant.name + '</h2><p><i> ' + restaurant.soupType + '  soup base</i></p> <div class="insta-images"><a href="' +
           data.data[0].link + '"  target="_blank"><img src="' + data.data[0].images.low_resolution.url + '"></a><a href="' +
           data.data[1].link + '"  target="_blank"><img src="' + data.data[1].images.low_resolution.url + '"></a><a href="' +
-          data.data[2].link + '"  target="_blank"><img src="' + data.data[2].images.low_resolution.url + '"></a><a href="' +
-          data.data[3].link + '"  target="_blank"><img src="' + data.data[3].images.low_resolution.url + '"></a></div></div>';
+          data.data[2].link + '"  target="_blank"><img src="' + data.data[2].images.low_resolution.url + '"></a></div><p><i>Images from Instagram</i></p></div>';
           infoWindow.setContent(iWContent);
           //self.infoWindow().open(myPlaces.map, currentMarker);
 
@@ -177,7 +165,7 @@ var viewModel = function () {
 
       ; //End Ajax request
       console.log("Restaurant Clicked On");
-
+      toggleBounce(restaurant.marker);
       infoWindow.open(map, this);
 
     }); //end click listener
@@ -194,7 +182,7 @@ var viewModel = function () {
     marker.setAnimation(null);
   } else {
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function(){ marker.setAnimation(null); }, 2100);
+    setTimeout(function(){ marker.setAnimation(null); }, 1450);
   }
 }
 
@@ -206,7 +194,10 @@ var viewModel = function () {
 
 
 
-
+  self.showWindows = function(restaurant) { //this recognizes GeoCoding and AJAX
+        //console.log(placeItem);
+        google.maps.event.trigger(restaurant.marker, 'click')
+    }
 
 
 

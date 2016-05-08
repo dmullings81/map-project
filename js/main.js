@@ -58,6 +58,13 @@ var Restaurant = function(data) {
 //held inside initMap as this is what the API is calling back to. Change later?
 function initMap() {
 
+//Check if the map loaded, if not an error message appears appears
+//Used guide here https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282
+
+if (typeof google === 'undefined') {
+  googleError();
+}
+
 var viewModel = function () {
 
     var self = this;
@@ -265,7 +272,10 @@ self.restaurantList().forEach(function(restaurant) {
 ko.applyBindings(new viewModel());
 }
 
-
+//Function used when Google Maps API fails to load
+function googleError() {
+  $( "#map" ).append( "<p>Oops... Google Maps failed to load</p>" );
+};
 
 // End ViewModel
 

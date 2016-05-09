@@ -24,7 +24,7 @@ var restaurants = [
     name: "Enja",
     lat: 35.648980,
     lng: 138.589937,
-    soupType: "fish" //tonkotsu gyofun gyokai sakana
+    soupType: "tonkotsu-gyokai"
   },
   {
     name: "Zenjiro",

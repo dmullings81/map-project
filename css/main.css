@@ -26,6 +26,7 @@ h2 {
 	margin-bottom: 0.6em;
     -webkit-margin-before: 0.3em;
     -webkit-margin-after: 0.6em;
+    clear: both;
 }
 
 .instagram-div {
@@ -42,7 +43,7 @@ h2 {
 	height:120px;
 	width: 125px;
 	float: left;
-	padding-right: 5px;
+	padding: 3px;
 }
 
 .gm-style-iw {

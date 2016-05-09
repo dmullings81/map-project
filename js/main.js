@@ -78,8 +78,13 @@ var viewModel = function () {
         self.restaurantList.push( new  Restaurant(restaurantItem) );
     });*/
 
-//Google Maps API
 
+self.uniqueSoupTypes = ko.dependentObservable(function() {
+        var types = ko.utils.arrayMap(self.restaurantList(), function(item){ return item.soupType})
+        return ko.utils.arrayGetDistinctValues(types).sort();
+    });
+
+console.log(self.uniqueSoupTypes())
 
             //hardcoded map location stored as variable in case of adding further locs in future.
             var kofu = new google.maps.LatLng(35.653296, 138.557487);

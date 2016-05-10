@@ -38,6 +38,30 @@ var restaurants = [
     lng: 138.548888,
     soupType: "shoyu-tonkotsu"
   },
+  {
+    name: "Menmaru",
+    lat: 35.636431,
+    lng: 138.584119,
+    soupType: "shoyu"
+  },
+  {
+    name: "Maruminamoto",
+    lat: 35.647642,
+    lng: 138.567520,
+    soupType: "miso"
+  },
+  {
+    name: "Nagata",
+    lat: 35.646761,
+    lng: 138.539823,
+    soupType: "shio"
+  },
+  {
+    name: "Sennari",
+    lat: 35.651858,
+    lng: 138.541043,
+    soupType: "shio"
+  }
 ]
 
 // Restaurant object
@@ -78,13 +102,14 @@ var viewModel = function () {
         self.restaurantList.push( new  Restaurant(restaurantItem) );
     });*/
 
-
+// Array containing only unique soup types, for use in the datalist.
+// http://stackoverflow.com/questions/13359534/unique-items-from-an-observablearray-of-object-properties
 self.uniqueSoupTypes = ko.dependentObservable(function() {
         var types = ko.utils.arrayMap(self.restaurantList(), function(item){ return item.soupType})
         return ko.utils.arrayGetDistinctValues(types).sort();
     });
 
-console.log(self.uniqueSoupTypes())
+
 
             //hardcoded map location stored as variable in case of adding further locs in future.
             var kofu = new google.maps.LatLng(35.653296, 138.557487);
@@ -231,9 +256,15 @@ console.log(self.uniqueSoupTypes())
 
 
 // ******** Filter funcionality **********
+//technique from http://codepen.io/prather-mcs/pen/KpjbNN?editors=001
+
+
+// First, sort restaurantList array so the restaurants show alphabetically in the list
+self.restaurantList.sort(function (left, right) {
+  return left.name == right.name ? 0 : (left.name < right.name ? -1 : 1)
+});
 
 //array contains all markers currently visible, as they can be filtered out
-//technique from http://codepen.io/prather-mcs/pen/KpjbNN?editors=001
 
 self.visibleRestaurants = ko.observableArray([]);
 

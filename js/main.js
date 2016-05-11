@@ -1,270 +1,234 @@
-// Model
+/*-------------------------------------------------------------------------
+   * @description Interactive Neighborhood Map for Udacity's FEND Nanodegree
+   *
+   * @author Dimitris Mullings
+   *
+   * @dependencies
+   *  - knockout-3.4.0.js
+   *  - jquery.min.js
+   *-------------------------------------------------------------------------/
 
-//Info about each restaurant
+/** Model **/
+
+/** Info about each restaurant
+TODO: Add more restaurants **/
 var restaurants = [
   {
-    name: "Hanedaya",
-    lat: 35.641980,
-    lng: 138.543689,
-    soupType: "shoyu-tonkotsu"
+	name: "Hanedaya",
+	lat: 35.641980,
+	lng: 138.543689,
+	soupType: "shoyu-tonkotsu"
   },
   {
-    name: "Shoshi Kantentsu",
-    lat: 35.652693,
-    lng: 138.561918,
-    soupType: "miso"
+	name: "Shoshi Kantentsu",
+	lat: 35.652693,
+	lng: 138.561918,
+	soupType: "miso"
   },
   {
-    name: "Nakai",
-    lat: 35.642302,
-    lng: 138.557425,
-    soupType: "ebi"
+	name: "Nakai",
+	lat: 35.642302,
+	lng: 138.557425,
+	soupType: "ebi"
   },
   {
-    name: "Enja",
-    lat: 35.648980,
-    lng: 138.589937,
-    soupType: "tonkotsu-gyokai"
+	name: "Enja",
+	lat: 35.648980,
+	lng: 138.589937,
+	soupType: "tonkotsu-gyokai"
   },
   {
-    name: "Zenjiro",
-    lat: 35.645172,
-    lng: 138.554717,
-    soupType: "shoyu"
+	name: "Zenjiro",
+	lat: 35.645172,
+	lng: 138.554717,
+	soupType: "shoyu"
   },
   {
-    name: "Daikokuya",
-    lat: 35.647434,
-    lng: 138.548888,
-    soupType: "shoyu-tonkotsu"
+	name: "Daikokuya",
+	lat: 35.647434,
+	lng: 138.548888,
+	soupType: "shoyu-tonkotsu"
   },
   {
-    name: "Menmaru",
-    lat: 35.636431,
-    lng: 138.584119,
-    soupType: "shoyu"
+	name: "Menmaru",
+	lat: 35.636431,
+	lng: 138.584119,
+	soupType: "shoyu"
   },
   {
-    name: "Maruminamoto",
-    lat: 35.647642,
-    lng: 138.567520,
-    soupType: "miso"
+	name: "Maruminamoto",
+	lat: 35.647642,
+	lng: 138.567520,
+	soupType: "miso"
   },
   {
-    name: "Nagata",
-    lat: 35.646761,
-    lng: 138.539823,
-    soupType: "shio"
+	name: "Nagata",
+	lat: 35.646761,
+	lng: 138.539823,
+	soupType: "shio"
   },
   {
-    name: "Sennari",
-    lat: 35.651858,
-    lng: 138.541043,
-    soupType: "shio"
+	name: "Sennari",
+	lat: 35.651858,
+	lng: 138.541043,
+	soupType: "shio"
   }
 ]
 
-// Restaurant object
+/** Restaurant object **/
 var Restaurant = function(data) {
-    this.name = ko.observable(data.name);
-    this.lat = ko.observable(data.lat);
-    this.lng = ko.observable(data.lng);
-    this.soupType = ko.observableArray(data.soupType);
+	this.name = ko.observable(data.name);
+	this.lat = ko.observable(data.lat);
+	this.lng = ko.observable(data.lng);
+	this.soupType = ko.observableArray(data.soupType);
 }
 
-  //Global variables
-    var map;
-    var infoWindow;
-    var marker;
+/** Global variables **/
+var map;
+var infoWindow;
+var marker;
 
-// **** ViewModel ****
+/** ViewModel **/
 
-//held inside initMap as this is what the API is calling back to. Change later?
+/* Held inside initMap as this is what the API is calling back to.
+TODO: Remove this later? */
 function initMap() {
 
-//Check if the map loaded, if not an error message appears appears
-//Used guide here https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282
+/* Check if the map loaded, if not an error message appears appears
+//Used guide here https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282 */
 
 if (typeof google === 'undefined') {
   googleError();
 }
 
 var viewModel = function () {
+	var self = this;
 
-    var self = this;
+	/* Store list of restaurants in observableArray to easily bind using ko. */
+	self.restaurantList = ko.observableArray(restaurants);
 
-    //Store list of restaurants in observableArray to easily bind using ko.
-      self.restaurantList = ko.observableArray(restaurants);
+/*Alternative way to put the restaurant data into the array.
+Using Udacity's JavaScript Design Patterns CatClickers tutorial. */
+	/*restaurants.forEach(function(restaurantItem){
+		self.restaurantList.push( new  Restaurant(restaurantItem) );
+	});*/
 
-
-//Put the restaurant data into the array. Using Udacity's JavaScript Design Patterns CatClickers tutorial
-    /*restaurants.forEach(function(restaurantItem){
-        self.restaurantList.push( new  Restaurant(restaurantItem) );
-    });*/
-
-// Array containing only unique soup types, for use in the datalist.
-// http://stackoverflow.com/questions/13359534/unique-items-from-an-observablearray-of-object-properties
+/* Array containing only unique soup types, for use in the datalist filter.
+// http://stackoverflow.com/questions/13359534/unique-items-from-an-observablearray-of-object-properties */
 self.uniqueSoupTypes = ko.dependentObservable(function() {
-        var types = ko.utils.arrayMap(self.restaurantList(), function(item){ return item.soupType})
-        return ko.utils.arrayGetDistinctValues(types).sort();
-    });
+		var types = ko.utils.arrayMap(self.restaurantList(), function(item){ return item.soupType})
+		return ko.utils.arrayGetDistinctValues(types).sort();
+});
 
+/* hardcoded map location stored as variable in case of adding further locs in future. */
+var kofu = new google.maps.LatLng(35.653296, 138.557487);
+var mapOptions = {
+	center: kofu,
+	zoom:14,
+	mapTypeId:google.maps.MapTypeId.ROADMAP
+};
 
+var map = new google.maps.Map(document.getElementById("map"),mapOptions);
 
-            //hardcoded map location stored as variable in case of adding further locs in future.
-            var kofu = new google.maps.LatLng(35.653296, 138.557487);
+/* Build markers via the Maps API and place them on the map.
+// http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/ */
+self.restaurantList().forEach(function(restaurant) {
+	var position = new google.maps.LatLng(restaurant.lat, restaurant.lng);
+	var markerOptions = {
+		map: map,
+		position: position,
+		animation: google.maps.Animation.DROP,
+		title: restaurant.name
+	};
 
-            var mapOptions = {
-               center: kofu,
-               zoom:14,
-               mapTypeId:google.maps.MapTypeId.ROADMAP
-            };
+	/* Add marker for each restaurant */
+	restaurant.marker = new google.maps.Marker(markerOptions);
 
-            var map = new google.maps.Map(document.getElementById("map"),mapOptions);
-/*  TODO:  Google maps error message
-            setTimeout(function() {
-  if(!google || !google.maps) {
-    alert("Oops... Failed to reach Google Maps")
-  }
-}, 5000);*/
+	/* infoWindow contents */
 
+	/* Create new infowindow */
+	infoWindow = new google.maps.InfoWindow();
 
+	/* Create event listener to open infowindow when marker is clicked */
+	google.maps.event.addListener(restaurant.marker, 'click', function() {
 
-// http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
-    // Display multiple markers on a map
-    //var infoWindow = new google.maps.InfoWindow();
-
-//*********************************
-
-// Build Markers via the Maps API and place them on the map.
-  self.restaurantList().forEach(function(restaurant) {
-    var position = new google.maps.LatLng(restaurant.lat, restaurant.lng);
-    var markerOptions = {
-      map: map,
-      position: position,
-      animation: google.maps.Animation.DROP,
-      title: restaurant.name
-    };
-    //add marker for each restaurant
-    restaurant.marker = new google.maps.Marker(markerOptions);
-
-// ************* infoWindow contents **************
-
-//Create variables for use in contentString for infowindows
-    var windowNames = restaurant.name;
-
-    //Create new infowindow
-    infoWindow = new google.maps.InfoWindow(
-      {
-
-    //maxWidth: 700
-  });
-
-    //Create event listener to open infowindow when marker is clicked
-    google.maps.event.addListener(restaurant.marker, 'click', function() {
-
-          //Create contentString variable for infowindows
-          var contentString;
-          var latitude = restaurant.lat;
-          var longitude = restaurant.lng;
-          //Instagram API request URL
-          var instagramURL = "https://api.instagram.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.1fb234f.9116b984edae498289e20991c57994c6"
-          var instagramRequestTimeout = setTimeout(function(){
-        failContent = '<div id="content">' + windowNames + '<p>' + 'Oops... Failed to reach Instagram'+ '</p>' + '</div>'
-            infoWindow.setContent(failContent);
-    }, 8000);
-
-          $.ajax({
-      type: "GET",
-      dataType: "jsonp",
-      cache: false,
-      url: instagramURL,
-      }).done(function(data) {
-        if (data.data.length > 0) {
-        // placing the images on the page
-        for (var i = 0; i < 6; i++) {
-          iWContent = '<div class="instagram-div"><h2> ' + restaurant.name + '</h2><p><i> ' + restaurant.soupType + '  soup base</i></p> <div class="insta-images"><a href="' +
-          data.data[0].link + '"  target="_blank"><img src="' + data.data[0].images.low_resolution.url + '"></a><a href="' +
-          data.data[1].link + '"  target="_blank"><img src="' + data.data[1].images.low_resolution.url + '"></a><a href="' +
-          data.data[2].link + '"  target="_blank"><img src="' + data.data[2].images.low_resolution.url + '"></a></div><p><i>Images from Instagram</i></p></div>';
-          infoWindow.setContent(iWContent);
-          //self.infoWindow().open(myPlaces.map, currentMarker);
-
-          clearTimeout(instagramRequestTimeout);
-                  console.log(data);
-    }
+		  /* Create variables for use in infowindow strings */
+		  var iWContent;
+		  var failContent;
+		  var latitude = restaurant.lat;
+		  var longitude = restaurant.lng;
+		  var restaurantName = restaurant.name;
+		  var restaurantType = restaurant.soupType;
+		  /* Instagram API request URL */
+		  var instagramURL = "https://api.instagram.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.1fb234f.9116b984edae498289e20991c57994c6"
+		  /* Error handling in case of API failing*/
+		  var instagramRequestTimeout = setTimeout(function(){
+		failContent = '<div id="content">' + restaurantName + '<p>' + 'Oops... Failed to reach Instagram'+ '</p>' + '</div>'
+			infoWindow.setContent(failContent);
+	}, 8000);
+		  /* API call to Instagram */
+		  $.ajax({
+	  type: "GET",
+	  dataType: "jsonp",
+	  cache: false,
+	  url: instagramURL,
+	  }).done(function(data) {
+		if (data.data.length > 0) {
+		/* Places the images*/
+		for (var i = 0; i < 6; i++) {
+		  iWContent = '<div class="instagram-div"><h2> ' + restaurantName + '</h2><p><i> ' + restaurantType + '  soup base</i></p> <div class="insta-images"><a href="' +
+		  data.data[0].link + '"  target="_blank"><img src="' + data.data[0].images.low_resolution.url + '"></a><a href="' +
+		  data.data[1].link + '"  target="_blank"><img src="' + data.data[1].images.low_resolution.url + '"></a><a href="' +
+		  data.data[2].link + '"  target="_blank"><img src="' + data.data[2].images.low_resolution.url + '"></a></div><p><i>Images from Instagram</i></p></div>';
+		  infoWindow.setContent(iWContent);
+		  /* Stop error message being displayed */
+		  clearTimeout(instagramRequestTimeout);
+				  console.log(data);
+	}
   } else {
-                iWContent = '<div id="content">' + windowNames + '<p>' + 'No pictures found on Instagram'+ '</p>' + '</div>'
-                console.log(instagramURL);
-                infoWindow.setContent(iWContent);
-              }
-        });
+				/* In case of no data being returned from Instagram */
+				iWContent = '<div id="content">' + restaurantName + '<p>' + 'No pictures found on Instagram...'+ '</p>' + '</div>'
+				console.log(instagramURL);
+				infoWindow.setContent(iWContent);
+			  }
+		});
 
-      ; //End Ajax request
-      console.log("Restaurant Clicked On");
-      toggleBounce(restaurant.marker);
-      infoWindow.open(map, this);
+	  ; /* End Ajax request */
 
-    }); //end click listener
+	  toggleBounce(restaurant.marker);
+	  infoWindow.open(map, this);
 
-// ***********************************************
+	}); /* End listener */
 
+  }); /* End building markers */
 
-
-  }); // end building markers
-
-//make the marker bounce for a set duration
+/* Make the marker bounce for a set duration */
   function toggleBounce(marker) {
   if (marker.getAnimation() !== null) {
-    marker.setAnimation(null);
+	marker.setAnimation(null);
   } else {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function(){ marker.setAnimation(null); }, 1450);
+	marker.setAnimation(google.maps.Animation.BOUNCE);
+	setTimeout(function(){ marker.setAnimation(null); }, 1450);
   }
 }
 
+/* Bound to the sidebar list, triggers the marker click event */
+  self.showWindows = function(restaurant) {
+		google.maps.event.trigger(restaurant.marker, 'click')
+	}
 
 
 
+/** Filter funcionality **/
+/** technique from http://codepen.io/prather-mcs/pen/KpjbNN?editors=001 **/
 
 
-
-
-
-  self.showWindows = function(restaurant) { //this recognizes GeoCoding and AJAX
-        //console.log(placeItem);
-        google.maps.event.trigger(restaurant.marker, 'click')
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ******** Filter funcionality **********
-//technique from http://codepen.io/prather-mcs/pen/KpjbNN?editors=001
-
-
-// First, sort restaurantList array so the restaurants show alphabetically in the list
+/** First, sort restaurantList array so the restaurants show alphabetically in the list **/
 self.restaurantList.sort(function (left, right) {
   return left.name == right.name ? 0 : (left.name < right.name ? -1 : 1)
 });
 
-//array contains all markers currently visible, as they can be filtered out
+/** array contains all markers currently visible, as they can be filtered out **/
 
 self.visibleRestaurants = ko.observableArray([]);
 
@@ -272,9 +236,7 @@ self.restaurantList().forEach(function(restaurant) {
   self.visibleRestaurants.push(restaurant);
 });
 
-  // This, along with the data-bind on the <input> element, lets KO keep
-  // constant awareness of what the user has entered. It stores the user's
-  // input at all times.
+  /** Makes the input box and observable, keeping us aware of what the user has type **/
   self.userInput = ko.observable('');
 
 
@@ -282,25 +244,28 @@ self.restaurantList().forEach(function(restaurant) {
   // for, and look at the user input in the search box. If the user input string
   // can be found in the place name, then the place is allowed to remain
   // visible. All other markers are removed.
+
+  /** Looks at the soup types the markers stand for, and the user input.
+  If the user input matches a soup type, those restaurants remain visible.
+  Other markers are removed. **/
   self.filterMarkers = function() {
-    var searchInput = self.userInput().toLowerCase();
+	var searchInput = self.userInput().toLowerCase();
 
-    self.visibleRestaurants.removeAll();
+	self.visibleRestaurants.removeAll();
 
-    // This looks at the name of each restaurant and then determines if the user
-    // input can be found within the restaurant name.
-    self.restaurantList().forEach(function(restaurant) {
-      restaurant.marker.setVisible(false);
-//to do - add
-      if (restaurant.soupType.toLowerCase().indexOf(searchInput) !== -1) {
-        self.visibleRestaurants.push(restaurant);
-      }
-    });
+	/** This looks at the soup type of each restaurant and then determines if the user
+	 input can be found within the soup type. **/
+	self.restaurantList().forEach(function(restaurant) {
+	  restaurant.marker.setVisible(false);
+	  if (restaurant.soupType.toLowerCase().indexOf(searchInput) !== -1) {
+		self.visibleRestaurants.push(restaurant);
+	  }
+	});
 
 
-    self.visibleRestaurants().forEach(function(restaurant) {
-      restaurant.marker.setVisible(true);
-    });
+	self.visibleRestaurants().forEach(function(restaurant) {
+	  restaurant.marker.setVisible(true);
+	});
   };
 
 }
@@ -308,28 +273,17 @@ self.restaurantList().forEach(function(restaurant) {
 ko.applyBindings(new viewModel());
 }
 
-//Function used when Google Maps API fails to load
+/** Function used when Google Maps API fails to load **/
 function googleError() {
   $( "#map" ).append( "<p>Oops... Google Maps failed to load</p>" );
 };
 
-// End ViewModel
+/** End ViewModel **/
 
 
-
-
-
-
-
-
-
-
-//Google API key AIzaSyCr492h5nUEKHElF9GxEq_fie2z3c478nY
-
-//Instagram API CLIENT ID dab20c62410d4e2abd752f80e27857f7
-//CLIENT SECRET 220c6ea74e484c68a645067992a3c717
-
-//Flickr Key 59a6bd8485cf47d8f550aff19d19386e
-// Secret 2459fbbf2fe176e0
+/** API Keys
+Google API key AIzaSyCr492h5nUEKHElF9GxEq_fie2z3c478nY
+Instagram API key (Access token) 379669.1fb234f.9116b984edae498289e20991c57994c6
+**/
 
 

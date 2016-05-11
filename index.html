@@ -1,47 +1,40 @@
 <!DOCTYPE html>
-<html>
 
-   <head>
-		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Ramen Kofu</title>
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/side-menu.css">
-        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Ramen Kofu</title>
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+	<link rel="stylesheet" href="css/main.css">
+</head>
 
-   </head>
-
-   <body>
-<div id="layout">
-    <!-- Menu toggle -->
-    <a href="#menu" id="menuLink" class="menu-link">
-        <!-- Hamburger icon -->
-        <span></span>
-    </a>
-
-    <div id="menu">
-        <div class="pure-menu">
-            <a class="pure-menu-heading" href="#">Kofu Ramen</a>
-            <input type="search" list="souptypes" placeholder="ramen type..." data-bind="textInput: userInput, event: {input: filterMarkers}">
-<datalist data-bind="foreach:uniqueSoupTypes" id="souptypes">
-  <option data-bind="value:$data">
-</datalist>
-            <ul data-bind="foreach:visibleRestaurants"  class="pure-menu-list">
-            <li class="pure-menu-item"><a href="#" data-bind="text: name, click: $parent.showWindows" class="pure-menu-link"></a></li>
-            </ul>
-        </div>
-    </div>
-    <div id = "map"></div>
-</div>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="js/knockout-3.4.0.js"></script>
-<script src="js/main.js"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr492h5nUEKHElF9GxEq_fie2z3c478nY&callback=initMap" onerror="googleError()"></script>
-
-<script src="js/ui.js"></script>
-   </body>
-
+<body>
+	<div id="layout">
+		<a href="#menu" id="menuLink" class="menu-link">
+			<span></span>
+		</a>
+		<div id="menu">
+			<div class="pure-menu">
+				<a class="pure-menu-heading" href="#">Kofu Ramen</a>
+					<input type="search" list="souptypes" placeholder="ramen type..." data-bind="textInput: userInput, event: {input: filterMarkers}">
+					<datalist data-bind="foreach:uniqueSoupTypes" id="souptypes">
+						<option data-bind="value:$data">
+					</datalist>
+					<ul data-bind="foreach:visibleRestaurants"  class="pure-menu-list">
+						<li class="pure-menu-item">
+							<a href="#" data-bind="text: name, click: $parent.showWindows" class="pure-menu-link"></a>
+						</li>
+					</ul>
+			</div>
+		</div>
+		<div id="map"></div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="js/knockout-3.4.0.js"></script>
+	<script src="js/main.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr492h5nUEKHElF9GxEq_fie2z3c478nY&callback=initMap" onerror="googleError()"></script>
+	<!-- JavaScript file for the sliding side menu-->
+	<script src="js/ui.js"></script>
+</body>
 </html>

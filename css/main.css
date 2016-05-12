@@ -26,6 +26,8 @@ h1, h2, a {
 input {
 	width: 144px;
 	margin-top: 1px;
+	-webkit-appearance: none;
+    border-radius: 0;
 }
 
 h2 {

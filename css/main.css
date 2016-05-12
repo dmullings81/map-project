@@ -14,6 +14,10 @@ html, body {
 	padding: 0;
 	}
 
+h1, h2, a {
+	font-family: "Source Sans Pro", sans-serif;
+}
+
 /* Ensures Google Map fills the window */
 #map {
 	height: 100%;
@@ -21,6 +25,7 @@ html, body {
 
 input {
 	width: 144px;
+	margin-top: 1px;
 }
 
 h2 {
@@ -58,7 +63,6 @@ h2 {
 	float: left;
 	padding: 3px;
 }
-
 
 /*
  * CH03 - Responsive Menu
@@ -151,7 +155,7 @@ appears on the left side of the page.
 	*/
 	#menu .pure-menu-selected,
 	#menu .pure-menu-heading {
-		background: #1f8dd6;
+		background: #000;
 	}
 
 	/*
@@ -166,8 +170,10 @@ appears on the left side of the page.
 	*/
 	#menu .pure-menu-heading {
 		font-size: 110%;
-		color: #fff;
+		font-weight: 600;
+		color: #da020e;
 		margin: 0;
+
 	}
 
 /*Dynamic Button For Responsive Menu*/

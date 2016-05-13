@@ -24,11 +24,14 @@ h1, h2, a {
 }
 
 input[type="search"] {
-	width: 144px;
+	width: 100%;
+	height: 1.5em;
 	margin-top: 1px;
 	-webkit-appearance: none !important;
 	-webkit-border-radius: 0 !important;
     border-radius: 0 !important;
+    border: 0 !important;
+    padding: 0!important;
 }
 
 h2 {
@@ -271,10 +274,5 @@ small screens.
 		left: 150px;
 		width: 260px;
 	}
-
-	input[type="search"] {
-	width: 256px;
-	}
-
 }
 

@@ -17,7 +17,7 @@ var restaurants = [{
     lng: 138.543689,
     soupType: "shoyu-tonkotsu"
 }, {
-    name: "Shoshi Kantentsu",
+    name: "Shoshikantentsu",
     lat: 35.652693,
     lng: 138.561918,
     soupType: "miso"
@@ -235,7 +235,7 @@ function initMap() {
              input can be found within the soup type. Pushes those restaurants back into visibles **/
             self.restaurantList().forEach(function(restaurant) {
                 restaurant.marker.setVisible(false);
-                if (restaurant.name.toLowerCase().indexOf(searchInput) !== -1) {
+                if (restaurant.soupType.toLowerCase().indexOf(searchInput) !== -1) {
                     self.visibleRestaurants.push(restaurant);
                 }
             });

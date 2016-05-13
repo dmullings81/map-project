@@ -34,10 +34,14 @@ input[type="search"] {
     padding: 0!important;
 }
 
-select {
-	width: 100%;
-	-webkit-border-radius: 0 !important;
-    border-radius: 0 !important;
+.soup-type {
+	color: #999;
+	font-size: 0.7em;
+	font-style: italic;
+	padding-bottom: 0;
+	padding-left: 0.8em;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 h2 {
@@ -134,7 +138,7 @@ appears on the left side of the page.
 	#menu a {
 		color: #999;
 		border: none;
-		padding: 0.6em 0 0.6em 0.6em;
+		padding: 0.6em 0 0 0.6em;
 	}
 
 	/*
@@ -185,6 +189,7 @@ appears on the left side of the page.
 		font-weight: 600;
 		color: #da020e;
 		margin: 0;
+		padding: 0.6em 0 0.6em 0.6em;
 
 	}
 

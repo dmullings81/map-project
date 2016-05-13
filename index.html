@@ -19,7 +19,7 @@
 		<div id="menu">
 			<div class="pure-menu">
 				<a class="pure-menu-heading" href="#">Kofu Ramen</a>
-					<input type="search" list="souptypes" placeholder="ramen type..." data-bind="textInput: userInput, event: {input: filterMarkers}">
+					<input class="soup-filter" type="search" list="souptypes" placeholder="ramen type..." data-bind="textInput: userInput, event: {input: filterMarkers}">
 					<datalist data-bind="foreach:uniqueSoupTypes" id="souptypes">
 						<option data-bind="value:$data">
 					</datalist>

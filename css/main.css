@@ -23,7 +23,7 @@ h1, h2, a {
 	height: 100%;
 }
 
-input {
+.soup-filter {
 	width: 144px;
 	margin-top: 1px;
 	-webkit-appearance: none;

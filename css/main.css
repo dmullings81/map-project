@@ -27,6 +27,7 @@ h1, h2, a {
 	width: 144px;
 	margin-top: 1px;
 	-webkit-appearance: none;
+	-moz-appearance: none;
     border-radius: 0;
 }
 
@@ -273,6 +274,10 @@ small screens.
 
 	.soup-filter {
 	width: 256px;
+	margin-top: 1px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+    border-radius: 0;
 	}
 
 }

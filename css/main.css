@@ -23,12 +23,12 @@ h1, h2, a {
 	height: 100%;
 }
 
-.soup-filter {
+input[type="search"] {
 	width: 144px;
 	margin-top: 1px;
-	-webkit-appearance: none;
-	-webkit-border-radius: 0;
-    border-radius: 0;
+	-webkit-appearance: none !important;
+	-webkit-border-radius: 0 !important;
+    border-radius: 0 !important;
 }
 
 h2 {

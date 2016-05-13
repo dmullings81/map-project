@@ -235,7 +235,7 @@ function initMap() {
              input can be found within the soup type. Pushes those restaurants back into visibles **/
             self.restaurantList().forEach(function(restaurant) {
                 restaurant.marker.setVisible(false);
-                if (restaurant.soupType.toLowerCase().indexOf(searchInput) !== -1) {
+                if (restaurant.name.toLowerCase().indexOf(searchInput) !== -1) {
                     self.visibleRestaurants.push(restaurant);
                 }
             });

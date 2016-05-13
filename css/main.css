@@ -272,7 +272,7 @@ small screens.
 		width: 260px;
 	}
 
-	.soup-filter {
+	input[type="search"] {
 	width: 256px;
 	}
 

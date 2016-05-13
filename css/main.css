@@ -24,7 +24,7 @@ h1, h2, a {
 }
 
 input[type="search"] {
-	width: 100%;
+	width: 90%;
 	height: 1.5em;
 	margin-top: 1px;
 	-webkit-appearance: none !important;

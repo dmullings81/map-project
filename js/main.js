@@ -145,7 +145,7 @@ function initMap() {
                 var restaurantName = restaurant.name;
                 var restaurantType = restaurant.soupType;
                 /** Instagram API request URL **/
-                var instagramURL = "https://api.instagram.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.1fb234f.9116b984edae498289e20991c57994c6";
+                var instagramURL = "https://api.instagram.com/v1/media/search?lat=" + latitude + "&lng=" + longitude + "&distance=100&access_token=379669.dab20c6.b7aca1b877cf490d810f98f515b46dda";
                 /** Error handling in case of API failing **/
                 var instagramRequestTimeout = setTimeout(function() {
                     failContent = '<div id="content">' + restaurantName + '<p>' + 'Oops... Failed to reach Instagram' + '</p>' + '</div>';
